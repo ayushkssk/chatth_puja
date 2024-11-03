@@ -127,6 +127,7 @@
         .video-section {
             background: #f9f9f9;
             padding: 50px 20px;
+            transition: background-color 0.3s ease;
         }
 
         .video-container {
@@ -1280,6 +1281,73 @@
         .toggle-btn:active {
             transform: scale(0.95);
         }
+
+        /* Update video section styles for both themes */
+        .video-section {
+            padding: 50px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Light theme styles */
+        body.light-theme .video-section {
+            background: var(--section-bg-light);
+        }
+
+        body.light-theme .video-section h2 {
+            color: var(--text-color-light);
+        }
+
+        /* Dark theme styles */
+        body.dark-theme .video-section {
+            background: var(--section-bg-dark);
+        }
+
+        body.dark-theme .video-section h2 {
+            color: var(--text-color-dark);
+        }
+
+        /* Enhanced video container styles */
+        .video-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-theme .video-container {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Video iframe styles */
+        .video-container iframe {
+            width: 100%;
+            height: 450px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .video-container:hover iframe {
+            transform: scale(1.01);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .video-container iframe {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-container iframe {
+                height: 240px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1375,11 +1443,16 @@
     </section>
 
     <section class="video-section">
-        div
         <h2>Experience the Divine Celebration</h2>
         <div class="decorative-line"></div>
         <div class="video-container">
-            <iframe width="100%" height="450" src="https://youtu.be/wBnnIBCG3aY?si=f8McXyLAT0dWC1hP" frameborder="0" allowfullscreen></iframe>
+            <iframe 
+                src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1&loop=1&playlist=YOUR_VIDEO_ID" 
+                title="Chhath Puja Celebration"
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen
+            ></iframe>
         </div>
     </section>
 
@@ -1998,6 +2071,34 @@
                 document.querySelector('.light-particles').style.display = 'none';
             }
         });
+
+        // Add this to your existing JavaScript to handle video theme transitions
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoSection = document.querySelector('.video-section');
+            const originalToggleTheme = window.toggleTheme;
+            
+            window.toggleTheme = () => {
+                originalToggleTheme();
+                
+                // Add smooth transition for video section
+                videoSection.style.transition = 'background-color 0.5s ease';
+                
+                // Optional: Add a subtle animation to the video container
+                const videoContainer = document.querySelector('.video-container');
+                videoContainer.style.animation = 'pulse 0.5s ease';
+            }
+        });
+
+        // Add this if you want a subtle pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.02); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html> 
