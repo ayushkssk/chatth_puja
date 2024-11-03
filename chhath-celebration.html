@@ -212,44 +212,106 @@
 
         /* Theme Toggle Button */
         .theme-toggle {
-            position: relative;
-            font-size: 24px;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Hover Effect */
         .theme-toggle:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-color);
         }
 
-        .theme-toggle::after {
+        /* Active State */
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Tooltip */
+        .theme-toggle::before {
             content: attr(data-tooltip);
             position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-right: 10px;
+            padding: 8px 12px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 14px;
+            white-space: nowrap;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
-            white-space: nowrap;
         }
 
-        .theme-toggle:hover::after {
+        .theme-toggle:hover::before {
             opacity: 1;
             visibility: visible;
+        }
+
+        /* Dark Theme Specific Styles */
+        body.dark-theme .theme-toggle {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.dark-theme .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: var(--accent-color);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .theme-toggle {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            /* Hide tooltip on mobile */
+            .theme-toggle::before {
+                display: none;
+            }
+        }
+
+        /* Ensure it doesn't overlap with other fixed elements */
+        @media (max-height: 600px) {
+            .theme-toggle {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* Add a subtle animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Add initial animation to draw attention */
+        .theme-toggle.initial-load {
+            animation: pulse 2s ease infinite;
         }
 
         /* Theme Classes */
@@ -500,6 +562,368 @@
             padding: 10px 20px;
             border-radius: 5px;
         }
+
+        /* Scroll Indicator Styles */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-text {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        .scroll-icon {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 10px;
+            animation: bounceArrow 2s infinite;
+        }
+
+        .scroll-arrow {
+            stroke-dasharray: 30;
+            stroke-dashoffset: 30;
+            animation: drawArrow 2s infinite;
+        }
+
+        .scroll-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .scroll-dots span {
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: dotPulse 1.5s infinite;
+        }
+
+        .scroll-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .scroll-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Scroll Indicator Animations */
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.4; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-5px); }
+        }
+
+        @keyframes bounceArrow {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes drawArrow {
+            0% { stroke-dashoffset: 30; }
+            50% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 30; }
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        /* Hover Effects */
+        .scroll-indicator:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .scroll-indicator:hover .scroll-text {
+            animation-play-state: paused;
+        }
+
+        .scroll-indicator:hover .scroll-arrow {
+            animation-play-state: paused;
+        }
+
+        /* Hide scroll indicator when scrolled */
+        .scroll-indicator.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+            pointer-events: none;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                bottom: 20px;
+            }
+
+            .scroll-text {
+                font-size: 0.9em;
+            }
+        }
+
+        /* Add a glowing effect in dark mode */
+        body.dark-theme .scroll-indicator {
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Smooth theme transitions */
+        .theme-transition {
+            transition: background-color 0.3s ease,
+                        color 0.3s ease,
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        /* Add a subtle glow effect in dark mode */
+        body.dark-theme .theme-toggle {
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Add a floating effect */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .theme-toggle {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .theme-toggle:hover {
+            animation: none;
+        }
+
+        /* Festival Decorations Styles */
+        .festival-decorations {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Show decorations in dark mode */
+        body.dark-theme .festival-decorations {
+            opacity: 1;
+        }
+
+        /* Twinkling Lights */
+        .twinkle-lights {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .light-string {
+            position: absolute;
+            display: flex;
+            gap: 30px;
+        }
+
+        .light-string.top {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            justify-content: space-around;
+        }
+
+        .light-string::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            top: 0;
+        }
+
+        .light {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: twinkle 1s infinite alternate;
+        }
+
+        /* Fireworks */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        .spark {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            animation: spark 1s ease-out forwards;
+        }
+
+        /* Diya Row */
+        .diya-row {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 20px;
+        }
+
+        .diya {
+            width: 20px;
+            height: 20px;
+            position: relative;
+        }
+
+        .diya::before {
+            content: '🪔';
+            font-size: 20px;
+            animation: flicker 1s infinite alternate;
+        }
+
+        /* Animations */
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(30); opacity: 0; }
+        }
+
+        @keyframes spark {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.8; filter: brightness(0.8); }
+        }
+
+        /* Generate lights */
+        .light:nth-child(odd) { background: #ff9900; }
+        .light:nth-child(even) { background: #ff0066; }
+        .light:nth-child(3n) { animation-delay: 0.5s; }
+        .light:nth-child(5n) { animation-delay: 0.7s; }
+
+        /* Sky Rocket and Blast Effects */
+        .sky-rocket {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff6b00;
+            border-radius: 50%;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .rocket-trail {
+            position: absolute;
+            width: 2px;
+            height: 10px;
+            background: linear-gradient(to top, transparent, #ff6b00);
+            transform-origin: bottom;
+        }
+
+        .blast {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .blast-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            transform-origin: center;
+        }
+
+        /* Animations */
+        @keyframes rocketLaunch {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(var(--final-y)) translateX(var(--final-x));
+                opacity: 0;
+            }
+        }
+
+        @keyframes blastParticle {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Sparkle effect for blast particles */
+        .sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 0.8s linear forwards;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -518,6 +942,21 @@
             <p class="hero-subtitle">Bihar's Most Sacred Festival</p>
         </div>
     </section>
+
+    <!-- Add this right after the hero section -->
+    <div class="scroll-indicator">
+        <div class="scroll-text">Scroll to Explore</div>
+        <div class="scroll-icon">
+            <svg viewBox="0 0 24 24">
+                <path class="scroll-arrow" d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+        </div>
+        <div class="scroll-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
 
     <section class="content-section">
         <h2>The Festival of Faith & Devotion</h2>
@@ -636,8 +1075,29 @@
                 </a>
             </div>
         </div>
-        <div class="theme-toggle" onclick="toggleTheme()" data-tooltip="Switch theme">🌞</div>
+        <button class="theme-toggle initial-load" onclick="toggleTheme()" aria-label="Toggle theme">
+            <span class="toggle-icon">🌞</span>
+        </button>
     </footer>
+
+    <!-- Add this after your body tag -->
+    <div class="festival-decorations">
+        <!-- Twinkling Lights -->
+        <div class="twinkle-lights">
+            <div class="light-string top"></div>
+            <div class="light-string left"></div>
+            <div class="light-string right"></div>
+        </div>
+        
+        <!-- Fireworks Container -->
+        <div class="fireworks-container"></div>
+        
+        <!-- Diya Row -->
+        <div class="diya-row"></div>
+        
+        <!-- Rangoli -->
+        <div class="rangoli"></div>
+    </div>
 
     <script>
         function toggleTheme() {
@@ -714,6 +1174,327 @@
                     }, 10);
                 });
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            
+            // Smooth scroll on click
+            scrollIndicator.addEventListener('click', () => {
+                const nextSection = document.querySelector('.chhath-facts');
+                nextSection.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Hide scroll indicator when scrolled
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > lastScrollTop) {
+                    scrollIndicator.classList.add('hidden');
+                } else if (scrollTop < 100) {
+                    scrollIndicator.classList.remove('hidden');
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+
+            // Add scroll progress indicator
+            const progressBar = document.createElement('div');
+            progressBar.className = 'scroll-progress';
+            document.body.appendChild(progressBar);
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                progressBar.style.width = scrolled + '%';
+            });
+        });
+
+        // Enhanced Theme Toggle JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            // Remove initial animation after 5 seconds
+            setTimeout(() => {
+                themeToggle.classList.remove('initial-load');
+            }, 5000);
+
+            // Update toggle icon and tooltip based on theme
+            function updateToggleState(isDark) {
+                const toggleIcon = themeToggle.querySelector('.toggle-icon');
+                toggleIcon.textContent = isDark ? '🌙' : '🌞';
+                themeToggle.setAttribute('data-tooltip', 
+                    isDark ? 'Switch to light mode' : 'Switch to dark mode'
+                );
+            }
+
+            // Handle theme toggle
+            window.toggleTheme = () => {
+                const body = document.body;
+                const isDark = body.classList.contains('dark-theme');
+                
+                // Add transition class for smooth color changes
+                body.classList.add('theme-transition');
+                
+                // Toggle theme
+                body.classList.toggle('dark-theme');
+                body.classList.toggle('light-theme');
+                
+                // Update toggle state
+                updateToggleState(!isDark);
+                
+                // Store preference
+                localStorage.setItem('theme', !isDark ? 'dark' : 'light');
+                
+                // Remove transition class after animation
+                setTimeout(() => {
+                    body.classList.remove('theme-transition');
+                }, 300);
+            };
+
+            // Initialize theme from localStorage
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                updateToggleState(true);
+            }
+        });
+
+        // Festival Decorations JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create twinkling lights
+            function createLights() {
+                const strings = document.querySelectorAll('.light-string');
+                strings.forEach(string => {
+                    for(let i = 0; i < 20; i++) {
+                        const light = document.createElement('div');
+                        light.className = 'light';
+                        string.appendChild(light);
+                    }
+                });
+            }
+
+            // Create fireworks
+            function createFirework() {
+                const container = document.querySelector('.fireworks-container');
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                
+                // Random position
+                const x = Math.random() * window.innerWidth;
+                const y = window.innerHeight - Math.random() * 300;
+                firework.style.left = `${x}px`;
+                firework.style.top = `${y}px`;
+                
+                // Random color
+                const colors = ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#ff4500'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.backgroundColor = color;
+                
+                container.appendChild(firework);
+                
+                // Create sparks
+                for(let i = 0; i < 20; i++) {
+                    const spark = document.createElement('div');
+                    spark.className = 'spark';
+                    spark.style.backgroundColor = color;
+                    
+                    // Random direction
+                    const angle = (Math.PI * 2 * i) / 20;
+                    const velocity = 50 + Math.random() * 50;
+                    spark.style.setProperty('--x', `${Math.cos(angle) * velocity}px`);
+                    spark.style.setProperty('--y', `${Math.sin(angle) * velocity}px`);
+                    
+                    firework.appendChild(spark);
+                }
+                
+                // Remove after animation
+                setTimeout(() => {
+                    container.removeChild(firework);
+                }, 1000);
+            }
+
+            // Create diyas
+            function createDiyas() {
+                const diyaRow = document.querySelector('.diya-row');
+                for(let i = 0; i < 10; i++) {
+                    const diya = document.createElement('div');
+                    diya.className = 'diya';
+                    diyaRow.appendChild(diya);
+                }
+            }
+
+            // Initialize decorations
+            createLights();
+            createDiyas();
+
+            // Launch fireworks periodically in dark mode
+            setInterval(() => {
+                if(document.body.classList.contains('dark-theme')) {
+                    createFirework();
+                }
+            }, 2000);
+
+            // Handle theme toggle
+            const originalToggleTheme = window.toggleTheme;
+            window.toggleTheme = () => {
+                originalToggleTheme();
+                if(document.body.classList.contains('dark-theme')) {
+                    createFirework();
+                    createFirework();
+                    createFirework();
+                }
+            };
+        });
+
+        // Sky Rocket and Blast Effects
+        class SkyRocket {
+            constructor() {
+                this.createRocket();
+            }
+
+            createRocket() {
+                const rocket = document.createElement('div');
+                rocket.className = 'sky-rocket';
+                
+                // Random starting position at bottom
+                const startX = Math.random() * window.innerWidth;
+                const startY = window.innerHeight;
+                
+                // Random target position in upper part of screen
+                const targetX = startX + (Math.random() - 0.5) * 200;
+                const targetY = window.innerHeight * 0.2 + Math.random() * window.innerHeight * 0.3;
+                
+                rocket.style.left = `${startX}px`;
+                rocket.style.bottom = '0';
+                
+                // Add trail effect
+                const trail = document.createElement('div');
+                trail.className = 'rocket-trail';
+                rocket.appendChild(trail);
+                
+                document.body.appendChild(rocket);
+                
+                // Animate rocket
+                rocket.style.setProperty('--final-x', `${targetX - startX}px`);
+                rocket.style.setProperty('--final-y', `-${startY - targetY}px`);
+                rocket.style.animation = `rocketLaunch ${1 + Math.random() * 0.5}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+                
+                // Create blast when rocket reaches top
+                rocket.addEventListener('animationend', () => {
+                    document.body.removeChild(rocket);
+                    this.createBlast(targetX, targetY);
+                });
+            }
+
+            createBlast(x, y) {
+                const blast = document.createElement('div');
+                blast.className = 'blast';
+                blast.style.left = `${x}px`;
+                blast.style.top = `${y}px`;
+                document.body.appendChild(blast);
+
+                // Create main burst
+                this.createParticles(blast, 20, 100, '#ff6b00');
+                
+                // Create secondary bursts
+                setTimeout(() => {
+                    const subBlastCount = Math.floor(Math.random() * 3) + 2;
+                    for(let i = 0; i < subBlastCount; i++) {
+                        const angle = (Math.PI * 2 * i) / subBlastCount;
+                        const distance = 50 + Math.random() * 30;
+                        const subX = x + Math.cos(angle) * distance;
+                        const subY = y + Math.sin(angle) * distance;
+                        this.createParticles(blast, 15, 50, this.getRandomColor());
+                    }
+                }, 100);
+
+                // Cleanup
+                setTimeout(() => {
+                    document.body.removeChild(blast);
+                }, 2000);
+            }
+
+            createParticles(parent, count, spread, color) {
+                for(let i = 0; i < count; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'blast-particle';
+                    particle.style.backgroundColor = color;
+                    
+                    const angle = (Math.PI * 2 * i) / count;
+                    const velocity = spread * (0.3 + Math.random() * 0.7);
+                    const x = Math.cos(angle) * velocity;
+                    const y = Math.sin(angle) * velocity;
+                    
+                    particle.style.setProperty('--x', `${x}px`);
+                    particle.style.setProperty('--y', `${y}px`);
+                    particle.style.animation = 'blastParticle 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+                    
+                    parent.appendChild(particle);
+                    
+                    // Add sparkle effects
+                    this.createSparkles(particle, x, y);
+                }
+            }
+
+            createSparkles(particle, x, y) {
+                for(let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const sparkle = document.createElement('div');
+                        sparkle.className = 'sparkle';
+                        sparkle.style.left = `${x * Math.random()}px`;
+                        sparkle.style.top = `${y * Math.random()}px`;
+                        particle.appendChild(sparkle);
+                    }, Math.random() * 500);
+                }
+            }
+
+            getRandomColor() {
+                const colors = [
+                    '#ff0000', '#00ff00', '#0000ff', '#ffff00', 
+                    '#ff00ff', '#00ffff', '#ff6b00', '#ff1493'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+        }
+
+        // Initialize and control rockets
+        document.addEventListener('DOMContentLoaded', () => {
+            let rocketInterval;
+
+            function startRockets() {
+                if(document.body.classList.contains('dark-theme')) {
+                    rocketInterval = setInterval(() => {
+                        new SkyRocket();
+                    }, 2000);
+                }
+            }
+
+            function stopRockets() {
+                clearInterval(rocketInterval);
+            }
+
+            // Handle theme toggle
+            const originalToggleTheme = window.toggleTheme;
+            window.toggleTheme = () => {
+                originalToggleTheme();
+                if(document.body.classList.contains('dark-theme')) {
+                    startRockets();
+                    // Initial burst of rockets
+                    for(let i = 0; i < 3; i++) {
+                        setTimeout(() => new SkyRocket(), i * 300);
+                    }
+                } else {
+                    stopRockets();
+                }
+            };
+
+            // Start if already in dark theme
+            if(document.body.classList.contains('dark-theme')) {
+                startRockets();
+            }
         });
     </script>
 </body>
