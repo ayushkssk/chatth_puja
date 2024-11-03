@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chhath Puja Celebration</title>
+    <style>
+        :root {
+            --primary-color: #FFA500;
+            --secondary-color: #FF6B6B;
+            --accent-color: #FFD700;
+            --text-color-light: #333;
+            --text-color-dark: #fff;
+            --card-bg-light: #fff;
+            --card-bg-dark: #2d2d2d;
+            --section-bg-light: #f9f9f9;
+            --section-bg-dark: #1a1a1a;
+            --gradient-light: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            --gradient-dark: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #fff;
+            color: var(--text-color);
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                        url('https://images.unsplash.com/photo-1604525833109-21fef57e3e69?q=80') center/cover;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.6) 100%);
+        }
+
+        .sun-svg {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 4em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .content-section {
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .article-card {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-light);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .article-card:hover::before {
+            opacity: 1;
+        }
+
+        .article-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .article-content {
+            padding: 20px;
+        }
+
+        .video-section {
+            background: #f9f9f9;
+            padding: 50px 20px;
+        }
+
+        .video-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .decorative-line {
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 100px;
+            margin: 20px auto;
+        }
+
+        /* Add this beautiful SVG sun animation */
+        .sun-rays {
+            fill: #FFD700;
+            transform-origin: center;
+            animation: raysPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes raysPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Footer Styles */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .footer-content {
+            font-size: 1.1em;
+            color: var(--text-color);
+        }
+
+        .developer-link {
+            position: relative;
+            color: #FFA500;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 2px 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .developer-link:hover {
+            background: rgba(255, 165, 0, 0.1);
+        }
+
+        .developer-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .developer-link:hover .developer-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: relative;
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .theme-toggle::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Theme Classes */
+        body.light-theme {
+            --text-color: #333;
+            background: #fff;
+        }
+
+        body.dark-theme {
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --section-bg: var(--section-bg-dark);
+            background: var(--gradient-dark);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .footer {
+                padding: 10px;
+            }
+            
+            .footer-content {
+                font-size: 0.9em;
+            }
+            
+            .theme-toggle {
+                font-size: 20px;
+                padding: 8px;
+            }
+        }
+
+        /* Festive Border Animation */
+        .festive-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .festive-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid var(--accent-color);
+            animation: borderGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Floating Lotus Animation */
+        .lotus {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            animation: floatLotus 6s ease-in-out infinite;
+        }
+
+        @keyframes floatLotus {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -15px) rotate(5deg); }
+            50% { transform: translate(0, -30px) rotate(0deg); }
+            75% { transform: translate(-10px, -15px) rotate(-5deg); }
+        }
+
+        /* Decorative Corner SVGs */
+        .corner-decoration {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+        }
+
+        .corner-decoration.top-left { top: 0; left: 0; transform: rotate(0deg); }
+        .corner-decoration.top-right { top: 0; right: 0; transform: rotate(90deg); }
+        .corner-decoration.bottom-left { bottom: 0; left: 0; transform: rotate(270deg); }
+        .corner-decoration.bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
+
+        /* Dark Mode Enhancements */
+        body.dark-theme .article-card {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        body.dark-theme .hero::before {
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        /* Glowing Effects for Dark Mode */
+        body.dark-theme .sun-svg circle {
+            filter: drop-shadow(0 0 10px var(--accent-color));
+        }
+
+        body.dark-theme .decorative-line {
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        /* Responsive Design Improvements */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3em;
+            }
+            
+            .article-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .corner-decoration {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* Chhath Facts Section Styles */
+        .chhath-facts {
+            padding: 80px 20px;
+            background: var(--section-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .facts-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: var(--text-color);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+        }
+
+        /* Fact Cards */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .fact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .fact-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .fact-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        /* Timeline Styles */
+        .festival-timeline {
+            margin-top: 80px;
+            position: relative;
+        }
+
+        .timeline-title {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 40px;
+            color: var(--text-color);
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--accent-color);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .day-marker {
+            background: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sun SVG -->
+    <svg class="sun-svg" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="20" fill="#FFD700"/>
+        <g class="sun-rays">
+            <path d="M50 0 L50 30 M50 70 L50 100 M0 50 L30 50 M70 50 L100 50" stroke="#FFD700" stroke-width="4"/>
+            <path d="M15 15 L35 35 M65 65 L85 85 M15 85 L35 65 M65 35 L85 15" stroke="#FFD700" stroke-width="4"/>
+        </g>
+    </svg>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Chhath Puja</h1>
+            <p class="hero-subtitle">Bihar's Most Sacred Festival</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>The Festival of Faith & Devotion</h2>
+        <div class="decorative-line"></div>
+        <div class="article-grid">
+            <article class="article-card">
+                <svg class="corner-decoration top-left" viewBox="0 0 50 50">
+                    <path d="M0 0 L50 0 L50 2 L2 2 L2 50 L0 50 Z" fill="var(--accent-color)"/>
+                </svg>
+                <img src="https://images.unsplash.com/photo-1604525833109-21fef57e3e69" alt="Chhath Celebration" class="article-image">
+                <div class="article-content">
+                    <h3>The Sacred Rituals</h3>
+                    <p>Chhath Puja is a four-day festival dedicated to the Sun God and Chhathi Maiya. Devotees perform rigorous rituals and fasting to thank the divine for sustaining life on earth.</p>
+                </div>
+            </article>
+            <article class="article-card">
+                <img src="https://images.unsplash.com/photo-1592906209472-a36b1f3782ef" alt="Sunset Prayers" class="article-image">
+                <div class="article-content">
+                    <h3>Evening Arghya</h3>
+                    <p>The evening offerings to the setting sun symbolize gratitude and devotion. Devotees stand in water bodies offering prayers and prasad to the Sun God.</p>
+                </div>
+            </article>
+            <article class="article-card">
+                <img src="https://images.unsplash.com/photo-1592906209472-a36b1f3782ef" alt="Morning Arghya" class="article-image">
+                <div class="article-content">
+                    <h3>Morning Arghya</h3>
+                    <p>The final morning offering marks the conclusion of Chhath Puja, where devotees offer prayers to the rising sun, symbolizing new beginnings and blessings.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="video-section">
+        <h2>Experience the Divine Celebration</h2>
+        <div class="decorative-line"></div>
+        <div class="video-container">
+            <iframe width="100%" height="450" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- Add this new section after the hero section -->
+    <section class="chhath-facts">
+        <div class="facts-container">
+            <h2 class="section-title">Amazing Facts About Chhath Puja</h2>
+            <div class="facts-grid">
+                <!-- Fact Card 1 -->
+                <div class="fact-card" data-aos="fade-up">
+                    <div class="fact-icon">🌅</div>
+                    <h3>Ancient Tradition</h3>
+                    <p>Dating back to the Vedic times, Chhath Puja is one of the oldest Hindu festivals dedicated to the Sun God (Surya) and Chhathi Maiya.</p>
+                </div>
+
+                <!-- Fact Card 2 -->
+                <div class="fact-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="fact-icon">🙏</div>
+                    <h3>36-Hour Fast</h3>
+                    <p>Devotees observe an incredible nirjala vrat (without water) for 36 hours! This showcases their unwavering devotion and spiritual strength.</p>
+                </div>
+
+                <!-- Fact Card 3 -->
+                <div class="fact-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="fact-icon">🌊</div>
+                    <h3>Eco-Friendly</h3>
+                    <p>One of the most eco-friendly festivals where offerings are biodegradable and celebrations promote environmental harmony.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Section -->
+            <div class="festival-timeline">
+                <h3 class="timeline-title">The Sacred Journey</h3>
+                <div class="timeline-container">
+                    <div class="timeline-item" data-aos="fade-right">
+                        <div class="day-marker">Day 1</div>
+                        <div class="event-content">
+                            <h4>Nahay Khay</h4>
+                            <p>Devotees take a holy dip and prepare satvik food</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-aos="fade-left">
+                        <div class="day-marker">Day 2</div>
+                        <div class="event-content">
+                            <h4>Kharna</h4>
+                            <p>Preparation of special prasad and beginning of fast</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-aos="fade-right">
+                        <div class="day-marker">Day 3</div>
+                        <div class="event-content">
+                            <h4>Sandhya Arghya</h4>
+                            <p>Evening offerings to the setting sun</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-aos="fade-left">
+                        <div class="day-marker">Day 4</div>
+                        <div class="event-content">
+                            <h4>Usha Arghya</h4>
+                            <p>Morning offerings to the rising sun</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add this before closing body tag -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                Created with ❤ by 
+                <a href="https://it4b.in" target="_blank" class="developer-link">
+                    Ayush
+                    <span class="developer-tooltip">Visit it4b.in</span>
+                </a>
+            </div>
+        </div>
+        <div class="theme-toggle" onclick="toggleTheme()" data-tooltip="Switch theme">🌞</div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            body.style.transition = 'all 0.5s ease';
+            
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = '🌙';
+                themeToggle.setAttribute('data-tooltip', 'Switch to light mode');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                themeToggle.innerHTML = '🌞';
+                themeToggle.setAttribute('data-tooltip', 'Switch to dark mode');
+            }
+            
+            localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
+        }
+
+        // Initialize theme on load
+        document.addEventListener('DOMContentLoaded', () => {
+            createLotusFlowers();
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.add(`${savedTheme}-theme`);
+            const themeToggle = document.querySelector('.theme-toggle');
+            if (savedTheme === 'dark') {
+                themeToggle.textContent = '🌙';
+                themeToggle.setAttribute('data-tooltip', 'Switch to light mode');
+            }
+        });
+
+        // Create floating lotus flowers
+        function createLotusFlowers() {
+            const lotusContainer = document.querySelector('.lotus-container');
+            const lotusCount = 8;
+            
+            for (let i = 0; i < lotusCount; i++) {
+                const lotus = document.createElement('div');
+                lotus.className = 'lotus';
+                lotus.style.left = `${Math.random() * 100}vw`;
+                lotus.style.top = `${Math.random() * 100}vh`;
+                lotus.style.animationDelay = `${Math.random() * 5}s`;
+                lotusContainer.appendChild(lotus);
+            }
+        }
+
+        // Initialize AOS (Animate On Scroll)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate fact cards on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.fact-card, .timeline-item').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Add hover effect to fact cards
+            document.querySelectorAll('.fact-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.querySelector('.fact-icon').style.animation = 'none';
+                    setTimeout(() => {
+                        card.querySelector('.fact-icon').style.animation = 'bounce 2s infinite';
+                    }, 10);
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

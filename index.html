@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chhath Puja Login</title>
+    <style>
+        :root {
+            --day-gradient: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            --night-gradient: linear-gradient(120deg, #2c3e50 0%, #3498db 100%);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.day {
+            background: var(--day-gradient);
+            color: #2c3e50;
+        }
+
+        body.night {
+            background: var(--night-gradient);
+            color: #fff;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 8s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-100px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 100px auto;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .toggle-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            right: 100%;
+            margin-right: 10px;
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-btn:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        body.day .toggle-btn {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        body.night .toggle-btn {
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .username-field {
+            background: rgba(255, 255, 255, 0.3) !important;
+            font-weight: 500;
+            color: inherit;
+            cursor: not-allowed;
+            border-left: 4px solid #fda085;
+        }
+
+        .username-field:focus {
+            transform: none !important;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            position: relative;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        /* Day mode heading */
+        body.day h1 {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Night mode heading */
+        body.night h1 {
+            background: linear-gradient(to right, #f6d365, #fda085);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Add a subtle glow animation */
+        @keyframes welcomeGlow {
+            0%, 100% { 
+                filter: brightness(100%) drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+            }
+            50% { 
+                filter: brightness(110%) drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+            }
+        }
+
+        h1 {
+            animation: welcomeGlow 3s ease-in-out infinite;
+        }
+
+        .password-wrapper {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .password-field {
+            background: rgba(255, 255, 255, 0.3) !important;
+            font-weight: 500;
+            color: inherit;
+            cursor: not-allowed;
+            border-left: 4px solid #fda085;
+        }
+
+        .password-info {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .password-wrapper:hover .password-info {
+            opacity: 1;
+        }
+
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            background: linear-gradient(45deg, #f6d365, #fda085);
+            border: none;
+            color: #fff;
+            padding: 12px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-btn:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        .arrow {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            transition: transform 0.3s ease;
+        }
+
+        /* Add animation for successful login */
+        @keyframes success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .success {
+            animation: success 0.5s ease;
+            background: linear-gradient(45deg, #00b09b, #96c93d) !important;
+        }
+    </style>
+</head>
+<body class="day">
+    <div class="toggle-btn" onclick="toggleDayNight()" data-tooltip="Switch theme">🌞</div>
+    <div class="login-container">
+        <h1>Welcome, Ayush! 👋</h1>
+        <p>Join us in celebrating the ancient Hindu festival dedicated to the Sun God and Chhathi Maiya</p>
+        <form>
+            <input type="text" value="Ayush" class="username-field" readonly>
+            <div class="password-wrapper">
+                <input 
+                    type="password" 
+                    value="admin" 
+                    id="password" 
+                    class="password-field" 
+                    readonly
+                >
+                <div class="password-info">Password: admin</div>
+            </div>
+            <button type="submit" class="login-btn">
+                <span>Begin Journey</span>
+                <svg class="arrow" viewBox="0 0 24 24">
+                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Create floating bubbles
+        function createBubbles() {
+            const bubbleCount = 15;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.width = Math.random() * 100 + 'px';
+                bubble.style.height = bubble.style.width;
+                bubble.style.left = Math.random() * 100 + 'vw';
+                bubble.style.animationDelay = Math.random() * 8 + 's';
+                document.body.appendChild(bubble);
+            }
+        }
+
+        function toggleDayNight() {
+            const btn = document.querySelector('.toggle-btn');
+            document.body.classList.toggle('night');
+            document.body.classList.toggle('day');
+            
+            if (document.body.classList.contains('day')) {
+                btn.textContent = '🌞';
+                btn.setAttribute('data-tooltip', 'Switch to night mode');
+            } else {
+                btn.textContent = '🌙';
+                btn.setAttribute('data-tooltip', 'Switch to day mode');
+            }
+            
+            // Add a little bounce animation
+            btn.style.animation = 'none';
+            btn.offsetHeight; // Trigger reflow
+            btn.style.animation = 'bounce 0.5s cubic-bezier(0.36, 0, 0.66, -0.56)';
+        }
+
+        // Initialize bubbles on load
+        createBubbles();
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const button = document.querySelector('.login-btn');
+            
+            // Add success animation
+            button.classList.add('success');
+            button.innerHTML = '<span>Welcome! Redirecting...</span> ✨';
+            
+            // Redirect after a short delay
+            setTimeout(() => {
+                window.location.href = 'chhath-celebration.html';
+            }, 1000);
+        }
+
+        // Update the form element to include onsubmit
+        document.querySelector('form').onsubmit = handleLogin;
+    </script>
+</body>
+</html>
