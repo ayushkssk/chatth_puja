@@ -1118,6 +1118,168 @@
                 transform: translateY(-10px);
             }
         }
+
+        /* Update dark theme text colors and backgrounds */
+        body.dark-theme {
+            --text-color: #fff;
+            --card-bg: rgba(45, 45, 45, 0.8);
+            --section-bg: rgba(26, 26, 26, 0.9);
+            background: var(--gradient-dark);
+            color: var(--text-color);
+        }
+
+        /* Update article card styles for dark mode */
+        body.dark-theme .article-card {
+            background: var(--card-bg);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-theme .article-content {
+            color: var(--text-color);
+        }
+
+        body.dark-theme .article-content h3 {
+            color: var(--accent-color);
+        }
+
+        /* Update section styles for dark mode */
+        body.dark-theme .content-section {
+            background: var(--section-bg);
+        }
+
+        body.dark-theme .content-section h2 {
+            color: var(--text-color);
+        }
+
+        /* Update fact card styles for dark mode */
+        body.dark-theme .fact-card {
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        /* Update timeline styles for dark mode */
+        body.dark-theme .timeline-container {
+            color: var(--text-color);
+        }
+
+        body.dark-theme .day-marker {
+            background: var(--accent-color);
+            color: #000;
+        }
+
+        /* Add these new styles for the theme transition */
+        .theme-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .theme-transition-overlay.active {
+            opacity: 1;
+        }
+
+        .celestial-body {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            top: 20px;
+            right: 20px;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: blur(0);
+            z-index: 9999;
+        }
+
+        /* Sun styles */
+        .celestial-body.sun {
+            background: #FFD700;
+            box-shadow: 0 0 60px #FF8C00, 
+                        0 0 100px #FF8C00,
+                        0 0 200px rgba(255, 140, 0, 0.3);
+            transform: scale(1);
+        }
+
+        /* Moon styles */
+        .celestial-body.moon {
+            background: #FEFCD7;
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.5),
+                        0 0 100px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Journey animations */
+        .celestial-journey {
+            animation: celestialPath 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes celestialPath {
+            0% {
+                transform: translate(0, 0) scale(1);
+                filter: blur(0);
+            }
+            50% {
+                transform: translate(-50vw, 40vh) scale(2);
+                filter: blur(2px);
+            }
+            100% {
+                transform: translate(-100vw, 0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* Background transition effects */
+        .day-overlay {
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
+        }
+
+        .night-overlay {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        /* Stars effect for night transition */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .stars.active {
+            opacity: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Enhanced toggle button */
+        .toggle-btn {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
@@ -1213,6 +1375,7 @@
     </section>
 
     <section class="video-section">
+        div
         <h2>Experience the Divine Celebration</h2>
         <div class="decorative-line"></div>
         <div class="video-container">
@@ -1321,35 +1484,97 @@
 
     <script>
         function toggleTheme() {
-            const body = document.body;
-            const themeToggle = document.querySelector('.theme-toggle');
+            const { overlay, celestialBody, stars } = createThemeTransition();
+            const isDark = document.body.classList.contains('dark-theme');
             
-            body.style.transition = 'all 0.5s ease';
+            // Set initial states
+            celestialBody.className = `celestial-body ${isDark ? 'moon' : 'sun'}`;
+            overlay.className = `theme-transition-overlay ${isDark ? 'night-overlay' : 'day-overlay'}`;
             
-            if (body.classList.contains('light-theme')) {
-                body.classList.remove('light-theme');
-                body.classList.add('dark-theme');
-                themeToggle.innerHTML = '🌙';
-                themeToggle.setAttribute('data-tooltip', 'Switch to light mode');
-            } else {
-                body.classList.remove('dark-theme');
-                body.classList.add('light-theme');
-                themeToggle.innerHTML = '🌞';
-                themeToggle.setAttribute('data-tooltip', 'Switch to dark mode');
+            // Start transition
+            setTimeout(() => {
+                overlay.classList.add('active');
+                celestialBody.classList.add('celestial-journey');
+                
+                if (!isDark) {
+                    stars.classList.add('active');
+                }
+                
+                // Switch theme halfway through animation
+                setTimeout(() => {
+                    document.body.classList.toggle('dark-theme');
+                    document.body.classList.toggle('light-theme');
+                    
+                    // Update toggle button
+                    const toggleBtn = document.querySelector('.toggle-btn');
+                    toggleBtn.textContent = isDark ? '🌞' : '🌙';
+                    toggleBtn.setAttribute('data-tooltip', `Switch to ${isDark ? 'night' : 'day'} mode`);
+                    
+                    // Save theme preference
+                    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+                }, 600);
+                
+                // Clean up
+                setTimeout(() => {
+                    document.body.removeChild(overlay);
+                    document.body.removeChild(celestialBody);
+                    document.body.removeChild(stars);
+                }, 1200);
+            }, 100);
+        }
+
+        // Initialize theme transition
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.querySelector('.toggle-btn');
+            toggleBtn.addEventListener('click', toggleTheme);
+        });
+
+        // Add this new theme transition code
+        function createThemeTransition() {
+            // Create overlay elements
+            const overlay = document.createElement('div');
+            overlay.className = 'theme-transition-overlay';
+            
+            const celestialBody = document.createElement('div');
+            celestialBody.className = 'celestial-body';
+            
+            const stars = document.createElement('div');
+            stars.className = 'stars';
+            
+            // Add to DOM
+            document.body.appendChild(overlay);
+            document.body.appendChild(celestialBody);
+            document.body.appendChild(stars);
+            
+            // Create stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.animationDelay = `${Math.random() * 1}s`;
+                stars.appendChild(star);
             }
-            
-            localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
+
+            return { overlay, celestialBody, stars };
         }
 
         // Initialize theme on load
         document.addEventListener('DOMContentLoaded', () => {
             createLotusFlowers();
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             document.body.classList.add(`${savedTheme}-theme`);
             const themeToggle = document.querySelector('.theme-toggle');
             if (savedTheme === 'dark') {
-                themeToggle.textContent = '🌙';
+                themeToggle.innerHTML = '🌙';
                 themeToggle.setAttribute('data-tooltip', 'Switch to light mode');
+            }
+
+            // Update initial theme state
+            if (!localStorage.getItem('theme')) {
+                localStorage.setItem('theme', 'dark');
             }
         });
 
