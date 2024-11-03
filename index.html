@@ -35,6 +35,7 @@
             background: rgba(255, 255, 255, 0.1);
             animation: float 8s infinite;
             pointer-events: none;
+            z-index: 0;
         }
 
         @keyframes float {
@@ -44,16 +45,62 @@
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.1);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 30px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            margin: 50px auto;
+            z-index: 1;
+        }
+
+        .festival-image-container {
+            position: relative;
             width: 100%;
-            max-width: 400px;
-            margin: 100px auto;
-            transform: translateY(0);
-            transition: all 0.3s ease;
+            max-width: 280px;
+            margin: -40px auto 0;
+            z-index: 2;
+        }
+
+        .festival-image {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+            animation: floatAnimation 6s ease-in-out infinite;
+        }
+
+        @keyframes floatAnimation {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+        }
+
+        body.day .festival-image {
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+        }
+
+        body.night .festival-image {
+            filter: drop-shadow(0 10px 20px rgba(255, 255, 255, 0.1));
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .festival-image-container {
+                max-width: 200px;
+                margin: -30px auto 0;
+            }
+
+            .login-container {
+                padding: 20px;
+                margin: 30px auto;
+            }
         }
 
         .login-container:hover {
@@ -109,6 +156,7 @@
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             backdrop-filter: blur(8px);
             border: 2px solid rgba(255, 255, 255, 0.2);
+            z-index: 9999;
         }
 
         .toggle-btn::after {
@@ -125,6 +173,7 @@
             opacity: 0;
             transform: translateX(20px);
             transition: all 0.3s ease;
+            z-index: 10000;
         }
 
         .toggle-btn:hover {
@@ -282,11 +331,45 @@
             animation: success 0.5s ease;
             background: linear-gradient(45deg, #00b09b, #96c93d) !important;
         }
+
+        /* Add shine effect */
+        .festival-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transform: skewX(-25deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+            20%, 100% {
+                left: 150%;
+            }
+        }
     </style>
 </head>
 <body class="day">
     <div class="toggle-btn" onclick="toggleDayNight()" data-tooltip="Switch theme">🌞</div>
     <div class="login-container">
+        <div class="festival-image-container">
+            <img 
+                src="chhath.png"
+                alt="Chhath Puja Festival" 
+                class="festival-image"
+            >
+        </div>
         <h1>Welcome, Ayush! 👋</h1>
         <p>Join us in celebrating the ancient Hindu festival dedicated to the Sun God and Chhathi Maiya</p>
         <form>
@@ -363,6 +446,23 @@
 
         // Update the form element to include onsubmit
         document.querySelector('form').onsubmit = handleLogin;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const festivalImage = document.querySelector('.festival-image');
+            
+            // Handle image loading error
+            festivalImage.onerror = function() {
+                console.warn('Festival image failed to load from Pngtree URL');
+                this.src = 'assets/chhath-puja.png'; // Fallback image path
+            };
+
+            // Add smooth theme transition
+            const originalToggleTheme = window.toggleDayNight;
+            window.toggleDayNight = () => {
+                originalToggleTheme();
+                festivalImage.style.transition = 'filter 0.5s ease, opacity 0.5s ease';
+            };
+        });
     </script>
 </body>
 </html>
