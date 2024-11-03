@@ -213,7 +213,7 @@
         /* Theme Toggle Button */
         .theme-toggle {
             position: fixed;
-            bottom: 30px;
+            top: 30px;
             right: 30px;
             width: 60px;
             height: 60px;
@@ -281,7 +281,7 @@
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .theme-toggle {
-                bottom: 20px;
+                top: 20px;
                 right: 20px;
                 width: 50px;
                 height: 50px;
@@ -297,7 +297,7 @@
         /* Ensure it doesn't overlap with other fixed elements */
         @media (max-height: 600px) {
             .theme-toggle {
-                bottom: 15px;
+                top: 15px;
                 right: 15px;
             }
         }
@@ -318,6 +318,8 @@
         body.light-theme {
             --text-color: #333;
             background: #fff;
+            position: relative;
+            overflow-x: hidden;
         }
 
         body.dark-theme {
@@ -924,17 +926,239 @@
                 opacity: 0;
             }
         }
+
+        /* Add these new styles for day mode shine effects */
+        body.light-theme {
+            --text-color: #333;
+            background: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Sunshine effect for day mode */
+        body.light-theme::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle at 50% 50%,
+                rgba(255, 253, 232, 0.8) 0%,
+                rgba(255, 253, 232, 0.3) 40%,
+                transparent 70%
+            );
+            animation: rotateSunshine 60s linear infinite;
+            z-index: -1;
+        }
+
+        /* Lens flare effect */
+        body.light-theme::after {
+            content: '';
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 244, 214, 0.8) 0%,
+                rgba(255, 244, 214, 0.3) 40%,
+                transparent 70%
+            );
+            filter: blur(5px);
+            animation: lensFlare 8s ease-in-out infinite;
+        }
+
+        /* Floating particles for light mode */
+        .light-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .light-particle {
+            position: absolute;
+            background: rgba(255, 220, 100, 0.3);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: floatParticle var(--duration) linear infinite;
+        }
+
+        /* Animations */
+        @keyframes rotateSunshine {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes lensFlare {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--x));
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced sun SVG styles for light mode */
+        body.light-theme .sun-svg {
+            filter: drop-shadow(0 0 15px rgba(255, 165, 0, 0.6));
+        }
+
+        body.light-theme .sun-rays {
+            animation: sunRaysPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes sunRaysPulse {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.2) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        /* Update the sun/moon SVG styles */
+        .celestial-svg {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            z-index: 1;
+        }
+
+        /* Moon specific styles */
+        .moon {
+            display: none;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        .moon-body {
+            fill: #FEFCD7;
+        }
+
+        .moon-crater {
+            fill: #f4e9bc;
+        }
+
+        .moon-eye {
+            fill: #333;
+            animation: blinkEyes 4s infinite;
+        }
+
+        .moon-smile {
+            fill: none;
+            stroke: #333;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        /* Sun specific styles */
+        .sun {
+            display: block;
+        }
+
+        /* Show/hide based on theme */
+        body.dark-theme .moon {
+            display: block;
+        }
+
+        body.dark-theme .sun {
+            display: none;
+        }
+
+        @keyframes blinkEyes {
+            0%, 96%, 100% { 
+                transform: scaleY(1);
+            }
+            98% { 
+                transform: scaleY(0.1);
+            }
+        }
+
+        /* Add subtle moon glow in dark mode */
+        body.dark-theme .moon {
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+            animation: moonFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes moonFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Sun SVG -->
-    <svg class="sun-svg" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="20" fill="#FFD700"/>
-        <g class="sun-rays">
-            <path d="M50 0 L50 30 M50 70 L50 100 M0 50 L30 50 M70 50 L100 50" stroke="#FFD700" stroke-width="4"/>
-            <path d="M15 15 L35 35 M65 65 L85 85 M15 85 L35 65 M65 35 L85 15" stroke="#FFD700" stroke-width="4"/>
-        </g>
-    </svg>
+    <button class="theme-toggle initial-load" onclick="toggleTheme()" aria-label="Toggle theme">
+        <span class="toggle-icon">🌞</span>
+    </button>
+
+    <!-- Replace the existing sun SVG with this new celestial SVG -->
+    <div class="celestial-svg">
+        <!-- Sun SVG -->
+        <svg class="sun" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="20" fill="#FFD700"/>
+            <g class="sun-rays">
+                <path d="M50 0 L50 30 M50 70 L50 100 M0 50 L30 50 M70 50 L100 50" stroke="#FFD700" stroke-width="4"/>
+                <path d="M15 15 L35 35 M65 65 L85 85 M15 85 L35 65 M65 35 L85 15" stroke="#FFD700" stroke-width="4"/>
+            </g>
+        </svg>
+
+        <!-- Moon SVG -->
+        <svg class="moon" viewBox="0 0 100 100">
+            <!-- Main moon circle -->
+            <circle class="moon-body" cx="50" cy="50" r="45"/>
+            
+            <!-- Craters -->
+            <circle class="moon-crater" cx="30" cy="35" r="8"/>
+            <circle class="moon-crater" cx="60" cy="65" r="6"/>
+            <circle class="moon-crater" cx="70" cy="30" r="5"/>
+            
+            <!-- Face -->
+            <g transform="translate(50 50) scale(0.6) translate(-50 -50)">
+                <!-- Left eye -->
+                <circle class="moon-eye" cx="35" cy="45" r="3"/>
+                
+                <!-- Right eye -->
+                <circle class="moon-eye" cx="65" cy="45" r="3"/>
+                
+                <!-- Smile -->
+                <path class="moon-smile" 
+                      d="M35 60 Q50 70 65 60"
+                      fill="none"/>
+            </g>
+        </svg>
+    </div>
 
     <section class="hero">
         <div class="hero-content">
@@ -1075,9 +1299,6 @@
                 </a>
             </div>
         </div>
-        <button class="theme-toggle initial-load" onclick="toggleTheme()" aria-label="Toggle theme">
-            <span class="toggle-icon">🌞</span>
-        </button>
     </footer>
 
     <!-- Add this after your body tag -->
@@ -1494,6 +1715,63 @@
             // Start if already in dark theme
             if(document.body.classList.contains('dark-theme')) {
                 startRockets();
+            }
+        });
+
+        // Add this to your existing JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create light particles
+            function createLightParticles() {
+                const container = document.createElement('div');
+                container.className = 'light-particles';
+                document.body.appendChild(container);
+
+                for (let i = 0; i < 50; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'light-particle';
+                    
+                    // Random size
+                    const size = Math.random() * 5 + 2;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // Random position
+                    particle.style.left = `${Math.random() * 100}vw`;
+                    
+                    // Random duration and movement
+                    const duration = Math.random() * 10 + 5;
+                    const xMove = (Math.random() - 0.5) * 200;
+                    particle.style.setProperty('--duration', `${duration}s`);
+                    particle.style.setProperty('--x', `${xMove}px`);
+                    
+                    container.appendChild(particle);
+                    
+                    // Remove and recreate particle after animation
+                    particle.addEventListener('animationend', () => {
+                        container.removeChild(particle);
+                        container.appendChild(particle);
+                    });
+                }
+            }
+
+            // Initialize particles
+            createLightParticles();
+
+            // Update particles on theme toggle
+            const originalToggleTheme = window.toggleTheme;
+            window.toggleTheme = () => {
+                originalToggleTheme();
+                const particlesContainer = document.querySelector('.light-particles');
+                if (document.body.classList.contains('light-theme')) {
+                    particlesContainer.style.display = 'block';
+                } else {
+                    particlesContainer.style.display = 'none';
+                }
+            };
+
+            // Initial state
+            if (document.body.classList.contains('dark-theme')) {
+                document.querySelector('.light-particles').style.display = 'none';
             }
         });
     </script>
